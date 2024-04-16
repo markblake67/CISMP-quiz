@@ -1,0 +1,103 @@
+# quiz.py
+
+import random
+from string import ascii_lowercase
+import time
+import win32gui, win32con
+
+NUM_QUESTIONS_PER_QUIZ = 3 #potentially make this a user input
+QUESTIONS = {
+    "If the accuracy of information is a major concern which of the following would reflet that this is covered effectively": [
+        "Integrity",
+        "Confidentiality",
+        "Availability",
+        "None of the above",
+    ],
+    "When a user logs onto a computer system and is asked for their mother's maiden name, which of the following aspects is the system ensuring": [
+        "Authentication",
+        "Accountability",
+        "Authorisation",
+        "Applicability",
+    ],
+    "ISO/IEC 27001 is an international standard for information security. Which organisation is responsible for the maintainence": [
+        "The International Organization for Standardization",
+        "The European Union Standards Committee",
+        "The Government of the Country in which it was implemented",
+        "The British Standards Institute",
+    ],
+    "How should the implementation of an information assurance system be seen within the organisation": [
+        "As a whole organisation issue",
+        "As a problem for the IS department only to sort out",
+        "As a problem on which the senior managers should make a decision but then leave others to deal with",
+        "An issue where outside expertise is the best solution",
+    ],
+    "How should the use of an international standard for information security be viewed by other senior managers within an organisation": [
+        "As implementing best practice",
+        "As a good idea if there was the right business environment in which to implement it.",
+        "As oerkill unless there are very serious problems with assurance",
+        "As the pet idea of the IT director who thinks it will look good to shareholders in the next annual report",
+    ]
+}
+
+num_questions = min(NUM_QUESTIONS_PER_QUIZ, len(QUESTIONS))
+questions = random.sample(list(QUESTIONS.items()), k=num_questions)
+
+def module_1():
+    num_correct = 0
+    print("\nInformation Security Principles")
+    for num, (question, alternatives) in enumerate(questions, start=1):
+        print(f"\nQuestion {num}:")
+        print(f"{question}?\n")
+        correct_answer = alternatives[0]
+        labeled_alternatives = dict(
+            zip(ascii_lowercase, random.sample(alternatives, k=len(alternatives)))
+        )
+        for label, alternative in labeled_alternatives.items():
+            print(f"  {label}) {alternative}")
+        while (answer_label := input("\nChoice? \n")) not in labeled_alternatives:
+            print(f"Please answer one of {', '.join(labeled_alternatives)} \n")
+        answer = labeled_alternatives[answer_label]
+        if answer == correct_answer:
+            num_correct += 1
+            print("⭐ Correct! ⭐\n")
+            print(f"You have got {num_correct}/{num} correct \n")
+            print("------------------------------------------------")
+        else:
+            print(f"The answer is {correct_answer!r}, not {answer!r} \n")
+            print(f"You have got {num_correct}/{num} correct \n")
+            print("-------------------------------------------------------")
+        
+def bold_text(text):
+    bold_start = '\033[1m'
+    bold_end = '\033[0m'
+    line_start = '\033[4m'
+    line_end = '\033[0m'
+    return line_start + bold_start + text + bold_end + line_end      
+        
+def main():
+    countdown = 2
+    while True:
+        print(bold_text("\nMain Menu"))
+        print("Type 'exit' to exit the application.\n")
+        print("(1) Information Security Principles\n")
+        print("(2) test\n")
+        choice = input("Enter choice: ")
+    
+        if choice == "1":
+            module_1()
+            print(f"\nWell done!")
+          #  print(f"\nYou got {num_correct} question correct out of {num}  \n")
+            for i in range(countdown, 0, -1):
+                print(i)
+                time.sleep(2)
+        elif choice == "2":
+            print("test")   
+        elif choice == "exit" or "Exit":
+            break
+        else:
+            print("Please give valid input")
+  #  return main
+    
+
+if __name__ == "__main__":
+    main()
